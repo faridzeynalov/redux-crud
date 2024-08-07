@@ -3,6 +3,7 @@ import Home from "./pages/Home";
 import DetailPage from "./pages/DetailPage";
 import { categoryLoader } from "./pages/DetailPage/loader";
 import AddPage from "./pages/AddPage";
+import BasketPage from "./pages/BasketPage";
 
 export const ROUTES = createBrowserRouter(
     [
@@ -25,6 +26,10 @@ export const ROUTES = createBrowserRouter(
         {
             path: "/add-product",
             element: <AddPage/>
+        },
+        {
+            path: "/basket",
+            element: <BasketPage/>
         }
     ]
 )

@@ -51,8 +51,8 @@ const Home = () => {
                 </tr>
               ) : null}
               {status === "succeeded"
-                ? categories.map((category) => (
-                    <tr key={category.id}>
+                ? categories.map((category,index) => (
+                    <tr key={index}>
                       <td>{category.id}</td>
                       <td>{category.name}</td>
                       <td>{category.description}</td>
