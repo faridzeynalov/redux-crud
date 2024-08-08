@@ -4,9 +4,6 @@ import "./index.scss";
 
 const Header = () => {
 
-//   const [showMenu, setShowMenu] = useState('');
-
-
   return (
     <header>
       <div className="container">
@@ -14,6 +11,9 @@ const Header = () => {
             <li>
                 <Link to="/">Categories</Link>
             </li>
+            {/* <li>
+                <Link to="/rtk-query">Categories (RTK Query)</Link>
+            </li> */}
             <li>
                 <Link to="/add-product">Add category</Link>
             </li>

@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const BASE_URL = 'https://northwind.vercel.app/api/categories';
+export const BASE_URL = 'https://northwind.vercel.app/api/categories';
 
 
 export const fetchCategories = async () => {

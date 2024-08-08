@@ -5,31 +5,32 @@ import { categoryLoader } from "./pages/DetailPage/loader";
 import AddPage from "./pages/AddPage";
 import BasketPage from "./pages/BasketPage";
 
-export const ROUTES = createBrowserRouter(
-    [
-        {
-            path: "/",
-            element: <Home />,
-            // children: [
-            //     {
-            //         path: ":categoryId",
-            //         loader: categoryLoader,
-            //         element: <DetailPage />
-            //     }
-            // ]
-        },
-        {
-            path: ":categoryId",
-            loader: categoryLoader,
-            element: <DetailPage />
-        },
-        {
-            path: "/add-product",
-            element: <AddPage/>
-        },
-        {
-            path: "/basket",
-            element: <BasketPage/>
-        }
-    ]
-)
+export const ROUTES = createBrowserRouter([
+  {
+    path: "/",
+    element: <Home />,
+    children: [
+      {
+        path: ":categoryId",
+        loader: categoryLoader,
+        element: <DetailPage />,
+      },
+    ],
+  },
+  {
+    path: "/add-product",
+    element: <AddPage />,
+    // children: [
+      
+    // ],
+  },
+  {
+    path: "/edit/:categoryId",
+    loader: categoryLoader,
+    element: <AddPage />,
+  },
+  {
+    path: "/basket",
+    element: <BasketPage />,
+  },
+]);

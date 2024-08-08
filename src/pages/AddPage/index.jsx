@@ -1,39 +1,54 @@
 import Layout from "../../components/Layout";
 import { Button, Form, Input, message } from "antd";
 import "./index.scss";
-import { useDispatch } from "react-redux";
-import { useEffect } from "react";
-import {
-  createCategories,
-  fetchCategoriesAsync,
-} from "../../redux/Slices/categoriesSlice";
-import { useNavigate } from "react-router-dom";
+// import { useDispatch } from "react-redux";
+// import { useEffect } from "react";
+// import {
+//   createCategories,
+//   fetchCategoriesAsync,
+// } from "../../redux/Slices/categoriesSlice";
+import { useNavigate, useMatch, useLoaderData } from "react-router-dom";
+import { useCreateCategoryMutation, usePartialUpdateCategoryMutation } from "../../redux/Slices/categoriesApi";
+
 
 const AddPage = () => {
   const navigate = useNavigate();
-  const dispatch = useDispatch();
+  // const dispatch = useDispatch();
   const [messageApi, contextHolder] = message.useMessage();
   const [form] = Form.useForm();
-  useEffect(() => {
-    dispatch(fetchCategoriesAsync());
-  }, [dispatch]);
+
+  const matchDetail = useMatch("/edit/:categoryId");
+  const categoryLoader = useLoaderData();
+
+  // useEffect(() => {
+  //   dispatch(fetchCategoriesAsync());
+  // }, [dispatch]);
+
+  const [createCategory] = useCreateCategoryMutation();
+  const [partialUpdateCategory] = usePartialUpdateCategoryMutation();
 
   const onFinish = (values, index) => {
-    dispatch(
-      createCategories({
-        id: index,
-        name: values.name,
-        description: values.description,
-      })
-    );
-    form.resetFields();
-    messageApi.open({
-      type: "success",
-      content: "Category added successfully!",
-    });
+    if (matchDetail) {
+      partialUpdateCategory({ id: categoryLoader.id, ...values });
+      console.log("values", values);
+      
+      messageApi.open({
+        type: "success",
+        content: "Category updated successfully!",
+      });
+
+    } else {
+      createCategory({ id: index, ...values });
+      messageApi.open({
+        type: "success",
+        content: "Category added successfully!",
+      });
+    }
     setTimeout(() => {
       navigate("/", { replace: true });
     }, 1000);
+
+    form.resetFields();
   };
 
   const onFinishFailed = (errorInfo) => {
@@ -44,7 +59,11 @@ const AddPage = () => {
     <Layout>
       <main className="addPage">
         <div className="container">
-          <h1>Add Category</h1>
+          <h1>
+            {matchDetail
+              ? `Edit category: ${categoryLoader?.name}`
+              : "Add Category"}{" "}
+          </h1>
 
           <div className="add">
             <Form
@@ -59,9 +78,9 @@ const AddPage = () => {
               style={{
                 maxWidth: 600,
               }}
-              initialValues={{
-                remember: true,
-              }}
+              initialValues={
+                matchDetail ? categoryLoader : { name: "", description: "" }
+              }
               onFinish={onFinish}
               onFinishFailed={onFinishFailed}
               autoComplete="off"
@@ -99,9 +118,13 @@ const AddPage = () => {
                   span: 16,
                 }}
               >
-                <Button type="primary" htmlType="submit">
-                  Add category
-                </Button>
+                {matchDetail ? (
+                  <Button type="primary" htmlType="submit">Edit category</Button>
+                ) : (
+                  <Button type="primary" htmlType="submit">
+                    Add category
+                  </Button>
+                )}
               </Form.Item>
             </Form>
           </div>
